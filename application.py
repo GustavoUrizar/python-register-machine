@@ -1,29 +1,34 @@
-import time 
-import os
+
+import os 
 print """-----------------------------REGISTER MACHINE--------------------------------"""
-print """ Whant do you want to do?"""
+print """ What do you want to do?"""
 
-price = {} 
-article = {}
-Original_list = []
-
+prices = {}
+inventary = {}
+total_lista = []
+#Opcion inventario
+def limpiar():
+	del total_lista[:]
+	print "Puede ingresar nueva factura."
+		
 def AddArticle():
 	while True:
-		insert = raw_input("Insert new article")
-		if insert.isalpha():
-			insert.lower()
+		product = raw_input("insert new article: ")
+		if product.isalpha():
+			product = product.lower()
 			break
 		else:
-			print "please insert a valid article"
+			print "invalid option"
 	while True:
 		try:
-			quantity = int(raw_input("insert quantity"))
-			price = float(raw_input("insert Value"))
+			price = float(raw_input("insert price: "))
+			quantity = int(raw_input("insert quantity: "))	
 			break
 		except ValueError:
-			print "please insert only numbers"
-	article[insert] = quantity
-	price[insert] = price
+			print "insert a valid option"
+#Aca ingresara al dic. precios el producto y precio  
+	prices[product] = price
+	inventary[product]= quantity #producto y cantidad
 
 
 MENU = True
@@ -39,5 +44,3 @@ while MENU == True:
 		MENU = True
 	else: 
 		print "please insert a valid option"
-	
-	
