@@ -1,176 +1,177 @@
-
+"""Starts the Register Machine Program"""
+import os
 import time
-import os 
+SHOPPING = {}
+INVENTARY = {}
+CLIENT = [] #List to save CLIENT's products
+PRICES = [] #List to keep the PRICES
+TOTAL = []
 
-prices = {}
-inventary = {}
-total_lista = []
-#Opcion inventario
-def clean():
-	os.system("clear")
-	del total_lista[:]
-	menus()
-		
-def AddArticle():
-	os.system("clear")
-	NewItems = True
-	while NewItems == True:
-		product = raw_input("insert new article: ")
-		if product.isalpha():
-			product = product.lower()
-			break
-		else:
-			print "invalid option"
-	
-	while True:
-		try:
-			price = float(raw_input("insert price: "))
-			quantity = int(raw_input("insert quantity: "))
-			prices[product] = price # added new product and price to dictionary
-			inventary[product] = quantity #added quantity 
-			AnotherArticle()	
-		except ValueError:
-			print "insert a valid option"
+"""FUNCTIONS"""
+def clear():
+    """Cleans the data on screen."""
+    if os.name == "posix":
+        os.system("reset")
+    elif os.name == ("nt"):
+        os.system("cls")
 
-def AnotherArticle():
-	others = True
-	while others == True:
-		other = raw_input("Do you want to add another article? yes or no: ")
-		if other in ["yes", "y", "YES", "Y"]:
-			AddArticle()
-		elif other in ["NO", "no", "n", "N"]:
-			os.system("clear")
-			menus()		
-		else:
-			print "insert a valid option"
+def deletedata():
+    """Function that clears the lists for a new sale"""
+    del CLIENT[:]
+    del PRICES[:]
+    del TOTAL[:]
+    menus()
 
-	
-#Opcion caja
-def Billing ():
-	os.system("clear")
-	customer = {} #Dic. local	
-	while True:
-		try: 
-			sell = raw_input("insert article: ")
-			sell = sell.lower()
-			sellQuantity= int(input("insert quantity: "))
-			customer[sell] = sellQuantity #Al dic. se le ingresara el producto que coloque y cantidad
-			calc = inventary[sell] - customer[sell] #a inventario le resta el nuevo dic. cliente
-			inventary[sell] = calc 
-			total = prices[sell] * customer[sell] #precio por la cantidad que ingreso
-			total_lista.append(total) #ingresa un valor a total_lista
-			AnotherBill()
-			break
-		except KeyError:
-			print "this product is not in inventary please select another one"
+def addarticle():
+    """add articles to the INVENTARY"""
+    os.system("clear")
+    newitems = True
+    while newitems == True:
+        product = raw_input("insert new article: ")
+        if product.isalpha():
+            product = product.lower()
+            break
+        else:
+            print "invalid option"
+    while True:
+        try:
+            price = float(raw_input("insert price: "))
+            SHOPPING[product] = price
+            INVENTARY[product] = price #added quantity
+            print "You have added the following:"
+            print INVENTARY
+            anotherarticle()
+        except ValueError:
+            print "insert a valid option"
 
-def AnotherBill():
-	others = True
-	while others == True:
-		other = raw_input("Do you want to add another article? yes or no: ")
-		if other in ["yes", "y", "YES", "Y"]:
-			Billing()
-		elif other in ["NO", "no", "n", "N"]:
-			os.system("clear")
-			factura()	
-		else:
-			print "insert a valid option"
-#Opcion facturar
-def factura():
-	print """
-choose an option: 
-1 Cash
-2 Gold Client
-3 Silver Client
-""" #Menu	
-	while True: 	
-		try: 
-			opcion = input("> ") #Aca ingresa el cliente la opcion 1 2 o 3
-			break
-		except (ValueError, NameError):
-			print "please insert a valid option from 1 to 3" 
-	
-	while (opcion >= 4): #Si la opcion es mayor o igual a 4 desplegara
-		print "invalid option"		
-		opcion = input("> ") #Y volvera a solicitar que de una opcion correcta
-	total2 = sum(total_lista) #llama el valor de total_lista
-	iva = 0.12
-	gold = 0.05
-	silver = 0.02
-	calc_iva = total2 * iva #Calcula el iva
-	iva_agregado = calc_iva + total2 #Agrega el iva a la cantidad
-	if opcion == 1: # if the customer does not have any card
-		print "loading...."
-		time.sleep(2)
-		print "your account total is %s plus iva %s" % (total2, calc_iva)
-		print "THE GRAND TOTAL IS %s" % iva_agregado
-		answer = 0
-		while (answer == 0):
-			a =	raw_input  ("Do you want to exit from billing? yes or no: ")
-			b = a.lower()
-			if b == "yes":
-				clean()
-				answer = 1
-			elif b == "no":
-				break
-				answer = 1
-			else:
-				print "please insert a valid option"
-	elif opcion == 2: #Discount if the customer uses the gold card
-		print "loading...."
-		time.sleep(2)		
-		calc_gold = iva_agregado * gold
-		desc_gold = iva_agregado - calc_gold
-		print "your account total is %s plus iva %s and the discount for using the gold card is %s" % (total2, calc_iva, calc_gold)
-		print "THE GRAND TOTAL IS %s " % desc_gold
-		answer = True
-		while answer == True:
-			a =	raw_input  ("Do you want to exit form billing? yes or no: ")
-			b = a.lower()
-			if b == "yes":
-				clean()
-				answer = False
-			elif b == "no":
-				break
-				answer = False
-			else:
-				print "please insert yes or no"
-	elif opcion == 3: #Discount if the customer uses the silver card
-		print "Loading...."
-		time.sleep(2)		
-		calc_silver = iva_agregado * silver
-		desc_silver = iva_agregado - calc_silver
-		print "your account total is %s plus iva %s and the discount for using the silver card is %s" % (total2, calc_iva, calc_silver)
-		print "THE GRAND TOTAL IS %s " % desc_silver
-		answer = True
-		while answer == True:
-			a =	raw_input  ("Do you want to exit form billing? yes or no: ")
-			b = a.lower()
-			if b == "yes":
-				clean()
-				answer = False
-			elif b == "no":
-				break
-				answer = False
-			else:
-				print "please insert yes or no"
+def anotherarticle():
+    """ask if the user wants to add another article to INVENTARY"""
+    others = True
+    while others == True:
+        other = raw_input("Do you want to add another article? yes or no: ")
+        other = other.lower()
+        if other == "yes":
+            addarticle()
+        elif other == "no":
+            os.system("clear")
+            menus()
+        else:
+            print "Insert only yes or no"
+
+def total():
+    """Function that adds the tax to the total"""
+    return money() + tax()
+
+def tax():
+    """Function that creates the tax"""
+    return money() * 0.12
+
+def money():
+    """Function that rests the discount from the total"""
+    return sum(PRICES) - cards()
+
+def cards():
+    """Function that adds the discount to the bill"""
+    des = 0
+    if "gold" in TOTAL: #if gold is in the list
+        des = sum(PRICES) * 0.05 #add to the variable the discount
+        return des #it returns the discount when called
+    elif "silver" in TOTAL:
+        des = sum(PRICES) * 0.02
+        return des
+    else: #if there is no card, will send 0 discount
+        return des
+
+def bill(): #below the %.2f converts in two digits float
+    """Function to print the Bill's PRICES"""
+    print "Your subtotal is: %.2f" %(sum(PRICES))#this function sums the list
+    print "Your discount is: %.2f" %(cards()) #calls the function with 2 decimals
+    print "Your Tax is: %.2f" %(tax()) #calls the tax with 2 decimals
+    print "Your total is: %.2f" %(total()) #Calls the total with 2 decimals
+    print "Thank you for shopping Come back soon"
+    time.sleep(5)
+    deletedata()
+
+def bill_printing():#it prints the bill in order with prices
+    """Function to sort the items and print them like a bill"""
+    CLIENT.sort()
+    temp = [] #temporary list
+    for number in CLIENT: #for every item in the dictionary
+        PRICES.append(INVENTARY[number]) #it adds the value to another list
+        if number not in temp: #if the item is not in temp
+            temp.append(number) #lets add it to depurate
+    for number in CLIENT: #for everything in the temporary, count the items
+        print "Products: " + number
+        print "quantity: " + str(CLIENT.count(number))
+        print "Unit Price: " + str("%.2f" %(INVENTARY[number]))
+        bill()
+
+def bill_calc():#it will allow the cashier enter the items to sell
+    """Function that asks the cashier for the item"""
+    os.system("clear")
+    calculus = True
+    while calculus == True:
+        try:
+            cashier = raw_input("Enter the item: ")
+            cashier = cashier.lower()
+            if cashier == "done": #sends the program to another function
+                clear()
+                bill_printing()
+                calculus = False #kills the function
+            elif cashier == "gold":
+                TOTAL.append("gold") #it sends gold to an empty list
+            elif cashier == "silver":
+                TOTAL.append("silver")
+            elif cashier == "silver" and "gold":
+                TOTAL.append("gold")
+            elif cashier not in INVENTARY: #it verifies than the item is in the store
+                print "Item not in store"
+                mainmenu()
+            else:
+                CLIENT.append(cashier)
+                print CLIENT#adds the item to the new list
+        except ValueError:
+            print "Enter only items"
+
+def mainmenu():
+    """if the item is not in stock ask to go back to menu"""
+    others = True
+    while others == True:
+        other = raw_input("Do you want to go back to the main menu? yes or no: ")
+        other = other.lower()
+        if other == "yes":
+            os.system("clear")
+            menus()
+        elif other == "no":
+            os.system("clear")
+            bill_calc()
+        else:
+            print "insert a valid option"
 
 def menus():
-	MENU = True
-	while MENU == True:
-		OPTION = raw_input(" 1. ADD AN ARTICLE TO INVENTARY \n 2. SELL ARTICLES \n 3. EXIT  ") 
-		if OPTION == "3":
-			MENU = False
-			print "Thank you for using the Register Machine"
-			exit()
-		elif OPTION == "2":
-			Billing()
-			MENU = True
-		elif OPTION == "1":
-			AddArticle()
-			MENU = True
-		else: 
-			print "please insert a valid option"
+    """provide the menu"""
+    os.system("clear")
+    print """-----------------------------REGISTER MACHINE--------------------------------"""
+    print """ What do you want to do?"""
+    #webbrowser.open("https://www.youtube.com/watch?v=didkQXhjeVQ")
+    menu = True
+    while menu == True:
+        option = raw_input(" 1. ADD AN ARTICLE TO INVENTARY \n 2. SELL ARTICLES \n 3. EXIT  ")
+        if option == "3":
+            menu = False
+            print "Thank you for using the Register Machine"
+            exit()
+        elif option == "2":
+            bill_calc()
+            menu = True
+        elif option == "1":
+            addarticle()
+            menu = True
+        else:
+            print "please insert a valid option"
+            time.sleep(2)
+            os.system("reset")
+
 os.system("clear")
 print """-----------------------------REGISTER MACHINE--------------------------------"""
 print """ What do you want to do?"""
