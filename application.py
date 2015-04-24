@@ -1,11 +1,11 @@
-"""Starts the Register Machine Program"""
+"""REGISTER MACHINE"""
 import os
 import time
 SHOPPING = {}
-INVENTARY = {}
+INVENTARY = {} #save the products in inventary
 CLIENT = [] #List to save CLIENT's products
 PRICES = [] #List to keep the PRICES
-TOTAL = []
+TOTAL = [] #save the answer for payment method
 
 """FUNCTIONS"""
 def clear():
@@ -89,7 +89,7 @@ def bill(): #below the %.2f converts in two digits float
     print "Your Tax is: %.2f" %(tax()) #calls the tax with 2 decimals
     print "Your total is: %.2f" %(total()) #Calls the total with 2 decimals
     print "Thank you for shopping Come back soon"
-    time.sleep(5)
+    enter = raw_input("Press enter to continue")
     deletedata()
 
 def bill_printing():#it prints the bill in order with prices
@@ -100,11 +100,12 @@ def bill_printing():#it prints the bill in order with prices
         PRICES.append(INVENTARY[number]) #it adds the value to another list
         if number not in temp: #if the item is not in temp
             temp.append(number) #lets add it to depurate
-    for number in CLIENT: #for everything in the temporary, count the items
+    for number in temp: #for everything in the temporary, count the items
         print "Products: " + number
         print "quantity: " + str(CLIENT.count(number))
         print "Unit Price: " + str("%.2f" %(INVENTARY[number]))
-        bill()
+        print "-----------------------------------------------------------------"
+    bill()
 
 def bill_calc():#it will allow the cashier enter the items to sell
     """Function that asks the cashier for the item"""
@@ -128,8 +129,7 @@ def bill_calc():#it will allow the cashier enter the items to sell
                 print "Item not in store"
                 mainmenu()
             else:
-                CLIENT.append(cashier)
-                print CLIENT#adds the item to the new list
+                CLIENT.append(cashier)#adds the item to the new list
         except ValueError:
             print "Enter only items"
 
@@ -153,7 +153,6 @@ def menus():
     os.system("clear")
     print """-----------------------------REGISTER MACHINE--------------------------------"""
     print """ What do you want to do?"""
-    #webbrowser.open("https://www.youtube.com/watch?v=didkQXhjeVQ")
     menu = True
     while menu == True:
         option = raw_input(" 1. ADD AN ARTICLE TO INVENTARY \n 2. SELL ARTICLES \n 3. EXIT  ")
