@@ -34,15 +34,18 @@ def addarticle():
         else:
             print "invalid option"
     while True:
-        try:
-            price = float(raw_input("insert price: "))
-            SHOPPING[product] = price
-            INVENTARY[product] = price #added quantity
-            print "You have added the following:"
-            print INVENTARY
-            anotherarticle()
+        try: #verify errors
+            price = float(raw_input("insert price: ")) #asks to insert the item
+            if price > 0:
+                SHOPPING[product] = price
+                INVENTARY[product] = price #added quantity
+                print "You have added the following:"
+                print INVENTARY
+                anotherarticle()
+            else:
+                print "Please insert correct price"       
         except ValueError:
-            print "insert a valid option"
+            print "Please insert correct price"
 
 def anotherarticle():
     """ask if the user wants to add another article to INVENTARY"""
@@ -89,7 +92,7 @@ def bill(): #below the %.2f converts in two digits float
     print "Your Tax is: %.2f" %(tax()) #calls the tax with 2 decimals
     print "Your total is: %.2f" %(total()) #Calls the total with 2 decimals
     print "Thank you for shopping Come back soon"
-    enter = raw_input("Press enter to continue")
+    raw_input("Press enter to continue")
     deletedata()
 
 def bill_printing():#it prints the bill in order with prices
